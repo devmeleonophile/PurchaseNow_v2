@@ -1,34 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import { useGetProductsQuery } from '../Slices/productSlices'; 
 import Products from '../Components/Products';
-import { Row,Col } from 'react-bootstrap';
-import axios from 'axios'
+import { Row, Col } from 'react-bootstrap';
+import Loader from '../Components/Loader';
+import Message from '../Components/Message';
 const HomeScreen = () => {
-
-  const[products, setProducts] = useState([]);
-
-  useEffect(()=>{
-    const fetchData = async()=>{
-      const {data} = await axios.get('/products');
-      setProducts(data)
-    }
-    fetchData();
-  })
+  const { data: products, isLoading, error } = useGetProductsQuery();
 
   return (
     <div>
-        <Row>
+      {isLoading ? (
+        <Loader/>
+      ) : error ? (
+        <Message variant='danger'>{error?.data?.message || error.error}</Message>
+      ) : (
+        <>
+          <Row>
             <h2>Latest Products</h2>
-        {
-            products.map((item,index)=>{
-                return <Col sm={12} md={6} lg={4} xl={3} key={item._id}>
-                   <Products product={item}></Products>
-                </Col>
-            })
-        }
-        </Row>
-      
+            {products.map((item) => (
+              <Col sm={12} md={6} lg={4} xl={3} key={item._id}>
+                <Products product={item} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default HomeScreen
+export default HomeScreen;

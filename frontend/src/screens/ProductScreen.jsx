@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
 import { useParams, Link, useSearchParams} from 'react-router-dom'
 import{Row,Col,Image, ListGroup, Card, Button} from 'react-bootstrap';
 import Rating from '../Components/Rating';
-import axios from 'axios';
-
+import { useGetProductDetailsQuery } from '../Slices/productSlices';
+import Loader from '../Components/Loader';
+import Message from '../Components/Message';
 const ProductScreen = () => {
     const {id : productId} = useParams();
-    const [product, setProduct] = useState({});
+    const{data : product , isLoading , error} = useGetProductDetailsQuery(productId);
+    
+    
 
-    useEffect(()=>{
-        const fetchProduct= async()=>{
-            const {data }= await axios.get(`/products/${productId}`);
-            setProduct(data);
-        }
-        fetchProduct();
-    },[productId])
-  return (
-    <div>
+ return (<div>
+    {isLoading ? (
+        <Loader/>
+      ) : error ? (
+        <Message variant='danger'>{error?.data?.message || error.error}</Message>
+      ) : (<>
+       <div>
       <Link to="/" className='btn btn-light my-3' >Go Back</Link>
       <Row>
         <Col md={5}>
@@ -60,6 +60,12 @@ const ProductScreen = () => {
 
       </Row>
 
+    </div>
+      
+      </>)
+    }
+
+   
     </div>
   )
 }

@@ -1,9 +1,11 @@
 import React from 'react';
-import { Button, Col, Form,Image, ListGroup, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form,Image, ListGroup, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Message from '../Components/Message';
 import { FaTrash } from 'react-icons/fa';
+import { addToCart } from '../Slices/cartSlices';
+import { removeFromCart } from '../Slices/cartSlices';
 
 const CartScreen = () => {
   const navigate = useNavigate();
@@ -11,10 +13,16 @@ const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   console.log(cartItems, 'cart');
-  const handleDelete =(item)=>{
-    const deleteItem = item;
-    cart = cartItems.filter((i)=> i._id !== item)
+  
+  const cartHandler =(product, qty)=>{
+    dispatch(addToCart({...product,qty}));
 
+  }
+  const handleDelete = (id) =>{
+     dispatch(removeFromCart(id));
+  }
+  const handleCheckOut =() =>{
+    navigate('/login?redirect=/shipping');
   }
 
   return (
@@ -22,8 +30,8 @@ const CartScreen = () => {
       <Col md={8}>
         <h1 style={{ marginBottom: '20px' }}>Shopping Cart</h1>
         {
-          cartItems.length === 0 ? <Message variant='danger'>
-            'No card in the item' <Link to ='/'>Go back</Link>
+          cartItems.length === 0 ? <Message>
+            No item in the cart <Link to ='/'>Go back</Link>
           </Message> : <ListGroup variant='flush'>
             {
               cartItems.map((item)=> (
@@ -45,7 +53,7 @@ const CartScreen = () => {
                         <span>${item.price}</span>
                       </Col>
                       <Col md={2} >
-                       <Form.Control as='select' value={item.qty}>
+                       <Form.Control as='select' value={item.qty} onChange={(e)=> cartHandler(item, Number(e.target.value))}>
                           {[...Array(item.countInStock).keys()].map((item)=>(
                             <option value={item+1} key={item+1}>
                                 {item+1}
@@ -55,7 +63,7 @@ const CartScreen = () => {
                     </Col>
 
                       <Col md={2}>
-                        <Button onClick={() => handleDelete(item._id)}>
+                        <Button onClick={()=> handleDelete(item._id)}>
                           <FaTrash></FaTrash>
                         </Button>
                       </Col>
@@ -67,6 +75,24 @@ const CartScreen = () => {
           </ListGroup>
         }  
           
+      </Col>
+      <Col md={4}>
+       <Card>
+        <ListGroup variant='flush'>
+          <ListGroup.Item>
+            <h2>SubTotal of {cartItems.length} items</h2>
+          </ListGroup.Item>
+          <ListGroup.Item>
+             <span>Total Price : ${cartItems.reduce((acc,item)=> acc + item.qty * item.price, 0  ).toFixed(2)}</span>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <Button variant='success' disabled={cartItems.le} onClick={handleCheckOut}>
+               Proceed Checkout
+            </Button>
+          </ListGroup.Item>
+        </ListGroup>
+
+       </Card>
       </Col>
     </Row>
   );

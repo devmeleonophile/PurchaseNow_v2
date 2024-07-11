@@ -2,6 +2,8 @@ import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import HomeScreen from "./screens/HomeScreen";
 import { Container } from "react-bootstrap";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Outlet } from "react-router-dom";
 function App() {
 
@@ -15,6 +17,8 @@ return (
         </Container>
         </main>
         <Footer/>
+        <ToastContainer/>
+
       </>
     </div>
   );

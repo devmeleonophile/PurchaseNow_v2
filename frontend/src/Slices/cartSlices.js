@@ -25,11 +25,23 @@ export const cartSlice  = createSlice({
 
             state.totalPrice  = (Number (state.itemPrice) + Number(state.itemShipping) +Number( state.itemTax) ).toFixed(2);
             localStorage.setItem('cart', JSON.stringify(state))
+        },
+        removeFromCart : (state, action) =>{
+            state.cartItems = state.cartItems.filter((item) => item._id !== action.payload);
+            state.itemPrice = Decimal(state.cartItems.reduce((acc,item)=> acc + item.price * item.qty, 0));
+
+            state.itemShipping = Decimal(state.itemPrice > 100 ? 20 : 0);
+
+            state.itemTax = Decimal (Number(0.15 * state.itemPrice).toFixed(2));
+
+            state.totalPrice  = (Number (state.itemPrice) + Number(state.itemShipping) +Number( state.itemTax) ).toFixed(2);
+            localStorage.setItem('cart', JSON.stringify(state))
+            
         }
         
         
     }
 })
 
-export const {addToCart} = cartSlice.actions;
+export const {addToCart, removeFromCart} = cartSlice.actions;
 export const cartReducer = cartSlice.reducer;

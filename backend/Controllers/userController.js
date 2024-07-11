@@ -7,7 +7,11 @@ const AuthUser = async(req, res) =>{
     const {email, password} = req.body;
     console.log(email,'email', password, 'password','initial login log');
     const user= await userModel.findOne({email})
-
+     if(!user){
+    res.status(401).json({ message: 'Please signup, u dont have an account yet!' });
+        
+     }
+     else{
     //jwt consists of headers, Payload, signature.
 
     const token = jwt.sign({userId : user._id}, process.env.JWT_SECRET, { expiresIn : '15d'})
@@ -19,6 +23,7 @@ const AuthUser = async(req, res) =>{
         sameSite : 'strict',
         maxAge : 30 * 24 * 60 * 60 * 1000 //30 days
     })
+}
 
     if(user && await(user.matchPassword(password))){
     res.json({
@@ -27,6 +32,7 @@ const AuthUser = async(req, res) =>{
         email : user.email,
         isAdmin : user.isAdmin
     })
+    
 }
     
 else {

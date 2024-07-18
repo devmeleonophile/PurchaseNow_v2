@@ -1,6 +1,7 @@
 import express from 'express'
 import userModel from '../Model/UserSchema.js';
 import { protect, Admin } from '../Middlewares/authMiddleware.js';
+
 const router = express.Router();
 import {  AuthUser,
     RegisterUser,
@@ -21,5 +22,6 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 router.route('/:id').delete(protect, Admin, DeleteUsers).get(protect, Admin, getUserById).put(UpdateUser);
+
 
 export default router

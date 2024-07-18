@@ -5,6 +5,7 @@ import productRouter from './Router/productRouter.js';
 import products from './products.js';
 import userRouter from './Router/userRoutes.js'
 import cookieParser from 'cookie-parser';
+import orderRouter from './Router/orderRoutes.js';
 
 dotenv.config();
 connectDb();
@@ -24,3 +25,4 @@ app.listen(`${PORT}`,()=>{
 
 app.use('/products' , productRouter)
 app.use('/users', userRouter)
+app.use('/orders', orderRouter)

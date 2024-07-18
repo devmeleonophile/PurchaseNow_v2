@@ -7,28 +7,28 @@ const StepComponent = ({step1, step2, step3, step4}) => {
         {
             step1 ? <LinkContainer to='/login'>
                <Nav.Link >
-                signIn
+                Sign In
                </Nav.Link>
             </LinkContainer> : <Nav.Link disabled>
-                sign In
+                Sign In
             </Nav.Link>
         }
         {
             step2 ? <LinkContainer to='/shipping'>
                <Nav.Link >
-                shipping
+                Shipping
                </Nav.Link>
             </LinkContainer> : <Nav.Link disabled>
-                shipping
+                Shipping
             </Nav.Link>
         }
          {
             step3 ? <LinkContainer to='/payment'>
                <Nav.Link >
-                payment
+                Payment
                </Nav.Link>
             </LinkContainer> : <Nav.Link disabled>
-                payment
+                Payment
             </Nav.Link>
         }
          {

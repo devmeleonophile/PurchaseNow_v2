@@ -22,6 +22,7 @@ app.use(cookieParser());
 app.listen(`${PORT}`,()=>{
     console.log(`listening on port ${PORT}`);
 })
+app.get('/config/paypal' , (req,res)=> res.send({clientId : process.env.PAYPAL_CLIENT_ID}))
 
 app.use('/products' , productRouter)
 app.use('/users', userRouter)

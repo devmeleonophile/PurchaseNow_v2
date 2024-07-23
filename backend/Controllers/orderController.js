@@ -57,7 +57,24 @@ const getOrderById = async(req, res) =>{
 }
 //Admin
 const updateOrdersToPaid = async(req, res)=>{
-    res.send('update orders to paid');
+    const order = await orderSchema.findById(req.params.id);
+
+    if(order){
+
+        order.isPaid = true,
+        order.paidAt = Date.now();
+        order.paymentResult = {
+            id : req.body.id,
+            status : req.body.status,
+            updatedAt : req.body.updatedAt,
+            emailAddress : req.body.emailAddress
+        }
+        const updatedOrder = await order.save();
+        res.status(200).json(updatedOrder)
+
+    }else{
+        res.status(404).send({message : 'Not paid for the order'});
+    }
 }
 //Admin
 const updateOrdersToDelivered = async(req, res)=>{

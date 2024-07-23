@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import StepComponent from '../Components/stepComponent';
 import Message from '../Components/Message'
 import Loader from '../Components/Loader'
-import { useCreateOrderMutation } from '../Slices/orderApiSlices';
+import { useCreateOrderMutation } from '../Slices/orderApiSlices.js';
 import {clearCart} from '../Slices/cartSlices'
 import { toast } from 'react-toastify';
 
@@ -14,6 +14,7 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [createOrder,{ isLoading, error}] = useCreateOrderMutation()
+  
   useEffect(()=>{
      if(!cart.shippingAddress.address){
       navigate('/shipping');
@@ -30,15 +31,16 @@ const PlaceOrderScreen = () => {
         shippingAddress : cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
         itemsPrice: cart.itemPrice,
-        taxPrice: cart.taxPrice,
+        taxPrice: cart.itemTax,
         shippingPrice : cart.itemShipping,
         totalPrice : cart.totalPrice
 
        }).unwrap();
        console.log(response,'orderscreen')
-
        dispatch(clearCart());
+
        navigate(`/orders/${response._id}`);
+
     } catch (error) {
         toast.error(error);
     }

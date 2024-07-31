@@ -13,6 +13,8 @@ function Header() {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
+  console.log(userInfo.isAdmin)
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
    const [logout] = useLogoutMutation();

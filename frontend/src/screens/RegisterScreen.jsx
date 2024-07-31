@@ -105,7 +105,7 @@ const LoginScreen = () => {
         <Col>
           Already have an account?{' '}
           <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
-            Register
+            Login
           </Link>
         </Col>
       </Row>

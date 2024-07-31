@@ -66,8 +66,8 @@ const updateOrdersToPaid = async(req, res)=>{
         order.paymentResult = {
             id : req.body.id,
             status : req.body.status,
-            updatedAt : req.body.updatedAt,
-            emailAddress : req.body.emailAddress
+            updated_At : req.body.updated_At,
+            email_Address : req.body.email_Address
         }
         const updatedOrder = await order.save();
         res.status(200).json(updatedOrder)

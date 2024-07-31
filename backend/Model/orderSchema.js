@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema({
         required: true,
         default: 0.0
     },
-    taxPrice: {  // Changed to camelCase to follow JS conventions
+    taxPrice: { 
         type: Number,
         required: true,
         default: 0.0

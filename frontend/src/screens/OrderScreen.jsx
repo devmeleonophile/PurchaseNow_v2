@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useGetOrderDetailsQuery, useGetPayPalClientIdQuery, usePayOrderMutation } from '../Slices/orderApiSlices';
+import { useGetOrderDetailsQuery, useGetPayPalClientIdQuery, usePayOrderMutation, useUpdateDeliverMutation } from '../Slices/orderApiSlices';
 import Loader from '../Components/Loader';
 import Message from '../Components/Message';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
@@ -16,6 +16,7 @@ const OrderScreen = () => {
     const { userInfo } = useSelector((state) => state.auth);
     const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
+    const [deliverOrder , {isLoading : deliverLoading}] = useUpdateDeliverMutation();
     useEffect(() => {
       
         if (!payPalLoading && !payPalError && paypal?.clientId) {
@@ -73,6 +74,17 @@ const OrderScreen = () => {
             }
         });
     };
+
+    const handleDeliver =async()=>{
+        try {
+            await deliverOrder(orderId);
+            refetch();
+            toast.success('Delivered Successfully');
+
+        } catch (error) {
+            toast.error(error?.data?.message || error.message);
+        }
+    }
 
     const onError = (error) => {
         toast.error(error?.data?.message || error.message);
@@ -165,6 +177,18 @@ const OrderScreen = () => {
                                             )}
                                         </ListGroup.Item>
                                     )}
+                                    {
+                                        deliverLoading && <Loader/>
+                                    }
+                                    {
+                                        userInfo && userInfo.name === 'Admin' && order.isPaid && !order.isDelivered && (<>
+                                          <ListGroup.Item>
+                                            <Button onClick={handleDeliver} variant='primary' className='btn btn-block'>
+                                               Mark As Delivered
+                                            </Button>
+                                          </ListGroup.Item>
+                                        </>)
+                                    }
                                 </ListGroup>
                             </Card>
                         </Col>

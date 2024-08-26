@@ -13,7 +13,6 @@ function Header() {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(userInfo.isAdmin)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,6 +74,7 @@ function Header() {
                     </NavDropdown.Item>
                   </NavDropdown>
                 </>
+                   
               ) : (
                 <LinkContainer to='/login'>
                   <Nav.Link>
@@ -82,7 +82,28 @@ function Header() {
                   </Nav.Link>
                 </LinkContainer>
               )}
-             
+                {
+                  userInfo && userInfo.name==='Admin' && <>
+                   <NavDropdown title='Admin actions' id='admindropdown'>
+                    <LinkContainer to='/admin/orderlist'>
+                     <NavDropdown.Item>
+                      orders
+                     </NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to='/admin/userlist'>
+                     <NavDropdown.Item>
+                      Users
+                     </NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to='/admin/productlist'>
+                     <NavDropdown.Item>
+                      Products
+                     </NavDropdown.Item>
+                    </LinkContainer>
+
+                   </NavDropdown>
+                  </>
+                }
             </Nav>
           </Navbar.Collapse>
         </Container>

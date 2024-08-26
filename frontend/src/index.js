@@ -20,8 +20,8 @@ import PaymentScreen from './screens/PaymentScreen.jsx';
 import PlaceOrderScreen from './screens/PlaceOrderScreen.jsx';
 import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen.jsx';
-// import AdminRoute from './Components/AdminRoute.jsx'
 import OrderListScreen from './screens/OrderListScreen.jsx'
+import {AdminRoute} from './Components/PrivateRoute.jsx'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter(
@@ -39,10 +39,12 @@ const router = createBrowserRouter(
         <Route path='/placeorder' element={<PlaceOrderScreen/>}/>
         <Route path='/orders/:id' element={<OrderScreen/>}/>
         <Route path='/profile' element={<ProfileScreen/>}/>
+        
       </Route>
-       
-      
 
+      <Route path='' element={<AdminRoute/>}>
+        <Route path='/admin/orderlist' element={<OrderListScreen/>}/>
+      </Route>
     </Route>
   )
 )

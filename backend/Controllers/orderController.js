@@ -78,12 +78,26 @@ const updateOrdersToPaid = async(req, res)=>{
 }
 //Admin
 const updateOrdersToDelivered = async(req, res)=>{
-    res.send('update orders to be delivered');
+    
+     const order = await orderSchema.findById(req.params.id);
+
+     if(order){
+        order.isDelivered = true;
+        order.deliveredAt = Date.now();
+        const updatedOrder = order.save();
+
+        res.status(200).json(updatedOrder);
+     }else{
+        res.status(404).json({message : 'cannot update'})
+
+     }
+
 }
 
 //Admin
 const getAllOrders = async(req, res)=>{
-    res.send('All orders')
+    const orders = await orderSchema.find({}).populate('user', 'id name');
+    res.status(200).json(orders);
 }
 
 export {

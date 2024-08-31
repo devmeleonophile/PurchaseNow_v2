@@ -22,6 +22,8 @@ import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen.jsx';
 import OrderListScreen from './screens/OrderListScreen.jsx'
 import {AdminRoute} from './Components/PrivateRoute.jsx'
+import AdminProduct from './screens/AdminProduct.jsx';
+import ProductEdit from './screens/ProductEdit.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter(
@@ -44,6 +46,8 @@ const router = createBrowserRouter(
 
       <Route path='' element={<AdminRoute/>}>
         <Route path='/admin/orderlist' element={<OrderListScreen/>}/>
+        <Route path='/admin/productlist' element={<AdminProduct/>}/>
+        <Route path='/admin/product/:id/edit' element={<ProductEdit/>}/>
       </Route>
     </Route>
   )

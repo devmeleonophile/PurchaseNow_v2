@@ -136,24 +136,59 @@ const updateUserProfile = async(req,res) => {
 
 }
 
+//admin
 const getUsers = async(req, res) => {
-    res.send('send the user list');
+    
+    const user = await userModel.find({});
+    res.status(200).json(user);
 }
 
 const getUserById = async(req, res) => {
-    res.send('The respected user');
+    const user = await userModel.findById(req.params.id).select('-password');
+  if(user){
+        res.status(200).json(user);
+    }else{
+        res.status(404).json({message:'User not found'})
+    }
+
 }
 
-const DeleteUsers = async(req, res) => {
-    res.send('Users deleted');
-}
+
 
 const DeleteUserById = async(req,res) => {
-    res.send('User deleted by Id');
+
+    const user = await userModel.findById(req.params.id);
+    console.log(user,'delete');
+
+    if(user){
+        if(user.name=== 'Admin'){
+            res.status(404);
+            throw new Error('Admin cannot be deleted')
+        }
+         await user.deleteOne({_id : user._id});
+         res.status(200).json({message:'user deleted successfully'});
+
+    }else{
+        res.status(404).json({message:'Admin cannot be deleted'});
+        throw new Error('user not found')
+    }
 }
 
 const UpdateUser = async(req, res) => {
-    res.send('The User is updated');
+    const user = await userModel.findById(req.params.id);
+    const {name, email, isAdmin} = req.body;
+    if(user){
+        
+        user.name = name;
+        user.email = email;
+        user.isAdmin = Boolean(isAdmin);
+        const updatedUser = user.save();
+        res.status(200).json(updatedUser);
+    }else{
+
+        res.status(400).json({message:'user cannot be updated'})
+    }
+    
 }
 
 export {
@@ -164,7 +199,6 @@ export {
     updateUserProfile,
     getUsers,
     getUserById,
-    DeleteUsers,
     DeleteUserById,
     UpdateUser
 }

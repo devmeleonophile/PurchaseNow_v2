@@ -60,3 +60,15 @@ export const updateProduct = async(req, res)=>{
 
 }
 
+export const deleteProduct = async(req, res) =>{
+
+    const product = await Products.findById(req.params.id);
+
+    if(product){
+      await Products.deleteOne({_id : product._id});
+      res.status(200).json('Deleted product Successfully');
+
+    }else{
+        res.status(404).send('Something is wrong!')
+    }
+}
